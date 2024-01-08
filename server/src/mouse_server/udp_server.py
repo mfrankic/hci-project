@@ -1,6 +1,6 @@
 import socket
-import pyautogui
 import struct
+from pynput.mouse import Controller, Button
 
 ip_address = "0.0.0.0"
 port = 5382
@@ -13,6 +13,7 @@ class UdpServer:
         self.server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server.bind((ip_address, port))
         self.online = False
+        self.mouse = Controller()
 
     def start(self):
         print(f"UDP server listening on port {port}")
@@ -33,14 +34,11 @@ class UdpServer:
         x, y, lmb = struct.unpack("!hhb", data)
 
         if lmb == 1:
-            pyautogui.click(button='left')
+            self.mouse.click(Button.left)
             return
         
         if x == 0 and y == 0: # skip if no mouse movement is needed
             return
         
-        self.move_mouse(x, y)
-
-    def move_mouse(self, x, y):
         dx, dy = x * mouse_scale_x, y * mouse_scale_y
-        pyautogui.moveRel(dx, dy)
+        self.mouse.move(dx, dy)
