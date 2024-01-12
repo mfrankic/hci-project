@@ -1,8 +1,7 @@
-from src.mouse_server import MouseServer
+from src.mouse_server import UdpServer
 
 def main():
-    server = MouseServer()
-    print(f'Starting server... {server}')
+    server = UdpServer()
     server.start()
 
 if __name__ == '__main__':
