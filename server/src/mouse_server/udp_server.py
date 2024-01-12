@@ -31,6 +31,7 @@ class UdpServer:
 
     def handle_data(self, data: bytes):
         # ! - little endian, h - short, b - byte
+        print(f"Received data: {data}")
         x, y, lmb = struct.unpack("!hhb", data)
 
         if lmb == 1:

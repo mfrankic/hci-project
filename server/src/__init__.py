@@ -1,1 +1,1 @@
-from src.mouse_server import MouseServer
+from src.mouse_server import UdpServer
