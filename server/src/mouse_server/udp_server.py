@@ -1,5 +1,4 @@
 import socket
-import struct
 from pynput.mouse import Controller, Button
 
 ip_address = "0.0.0.0"
@@ -20,7 +19,8 @@ class UdpServer:
         self.online = True
 
         while self.online:
-            data, _ = self.server.recvfrom(5)
+            data, _ = self.server.recvfrom(4096)
+            print(f"Received data: {data}")
             self.handle_data(data)
 
         self.close()
@@ -30,10 +30,19 @@ class UdpServer:
         self.server.close()
 
     def handle_data(self, data: bytes):
-        # ! - little endian, h - short, b - byte
-        print(f"Received data: {data}")
-        x, y, lmb = struct.unpack("!hhb", data)
+        decoded_data = data.decode("utf-8").split(" ")
+        unpacked_data = []
+        
+        for part in decoded_data:
+            try:
+                unpacked_data.append(float(part))
+            except ValueError:
+                unpacked_data.append(int(part))
+        
+        sensor, x, y, z, lmb = unpacked_data
 
+        print(f"Sensor: {sensor}, x: {x}, y: {y}, z: {z}, lmb: {lmb}")
+        
         if lmb == 1:
             self.mouse.click(Button.left)
             return
