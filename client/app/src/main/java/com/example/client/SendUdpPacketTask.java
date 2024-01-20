@@ -26,11 +26,9 @@ public class SendUdpPacketTask extends AsyncTask<Void, Void, Void> {
 
     private byte[] getData(int x, int y, boolean clicked)
     {
-        return ByteBuffer.allocate(5)
-                .putShort((short) x)
-                .putShort((short) y)
-                .put((byte) (clicked ? 1 : 0))
-                .array();
+        String message = x + " " + y + " " + (clicked ? 1 : 0) + " " + "0";
+
+        return message.getBytes();
     }
 
     @Override

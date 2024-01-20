@@ -38,6 +38,8 @@ public class SettingsActivity extends AppCompatActivity {
         buttonSetDefault.setOnClickListener(v -> setDefaultValues());
         buttonSetServerInfo.setOnClickListener(v -> setServer());
         buttonStart.setOnClickListener(v -> startMode());
+
+        setDefaultValues();
     }
 
     private void setDefaultValues()

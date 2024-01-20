@@ -32,7 +32,7 @@ public class MovementHandler implements SensorEventListener {
     private boolean registered;
 
 
-    private Vector3d gyroSample = new Vector3d(); // TODO: Make this a buffer to accommodate for vastly different sampling rates
+    private Vector3d gyroSample = new Vector3d();
     private long lastTime = 0;
     private long firstTime = 0;
     private ProcessData processData;
