@@ -1,7 +1,5 @@
 package com.example.client;
 
-import static com.example.client.MainActivity.SERVER_PORT;
-
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -44,6 +42,7 @@ public class MovementHandler implements SensorEventListener {
     private Handler networkHandler;
     DatagramSocket udpSocket = null;
     InetAddress serverAddr = null;
+    int serverPort;
 
     public MovementHandler(Context context, MouseInputs inputs) {
         this.context = context;
@@ -133,7 +132,7 @@ public class MovementHandler implements SensorEventListener {
 
             networkHandler.post(() -> {
                 try {
-                    DatagramPacket packet = new DatagramPacket(messageBytes, messageBytes.length, serverAddr, SERVER_PORT);
+                    DatagramPacket packet = new DatagramPacket(messageBytes, messageBytes.length, serverAddr, serverPort);
                     udpSocket.send(packet);
                 } catch (Exception e) {
                     e.printStackTrace();

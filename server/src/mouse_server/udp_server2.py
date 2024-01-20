@@ -1,4 +1,5 @@
 import socket
+import struct
 from pynput import mouse
 from screeninfo import get_monitors
 
@@ -48,15 +49,23 @@ class UdpServer2:
         self.mouse_controller.position = (center_x, center_y)
 
     def handle_data(self, data: bytes):
-        decoded_data = data.decode("utf-8").split(" ")
+        decoded_data = None
+        
+        try:
+            decoded_data = data.decode("utf-8").split(" ")
+            self.move_mouse_sensors(decoded_data)
+        except UnicodeDecodeError:
+            x, y, lmb = struct.unpack("!hhb", data)
+            self.move_mouse_touchpad(x, y, lmb)
 
-        if len(decoded_data) != 4:
+    def move_mouse_sensors(self, data: bytes):
+        if len(data) != 4:
             return
 
-        x = float(decoded_data[0])
-        y = float(decoded_data[1])
-        lmb = True if decoded_data[2] == "1" else False
-        reset_position = True if decoded_data[3] == "1" else False
+        x = float(data[0])
+        y = float(data[1])
+        lmb = True if data[2] == "1" else False
+        reset_position = True if data[3] == "1" else False
 
         if reset_position:
             self.reset_mouse_position()
@@ -75,4 +84,15 @@ class UdpServer2:
 
         print(f"Move - dx: {dx}, dy: {dy}")
 
+        self.mouse_controller.move(dx, dy)
+
+    def move_mouse_touchpad(self, x: int, y: int, lmb: int):
+        if lmb == 1:
+            self.mouse_controller.click(mouse.Button.left)
+            return
+        
+        if x == 0 and y == 0:
+            return
+        
+        dx, dy = x * mouse_scale_x, y * mouse_scale_y
         self.mouse_controller.move(dx, dy)
