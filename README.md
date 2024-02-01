@@ -15,6 +15,7 @@
 - Linux with X11 Window System (tested on Ubuntu 22.04 with GNOME 42.9)
   - does not work on Linux with Wayland
   - does not work on Windows
+- firewall must allow incoming connections on port 5382, or it can be disabled
 
 cd into `server` directory
 
