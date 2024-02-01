@@ -67,9 +67,6 @@ class UdpServer:
         mouse_scale_x = MOUSE_SCALE_X if mouse_type else TOUCHPAD_SCALE_X
         mouse_scale_y = MOUSE_SCALE_Y if mouse_type else TOUCHPAD_SCALE_Y
 
-        print(f"Mouse type: {mouse_type}")
-        print(f"Mouse Scale X: {mouse_scale_x}")
-
         if reset_position:
             self.reset_mouse_position()
             return
