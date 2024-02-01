@@ -5,8 +5,11 @@ from screeninfo import get_monitors
 ip_address = "0.0.0.0"
 port = 5382
 
-mouse_scale_x = 1.5
-mouse_scale_y = 1.5
+MOUSE_SCALE_X = 0.5
+MOUSE_SCALE_Y = 0.5
+
+TOUCHPAD_SCALE_X = 1.2
+TOUCHPAD_SCALE_Y = 1.2
 
 class UdpServer:
     def __init__(self):
@@ -52,13 +55,20 @@ class UdpServer:
         self.move_mouse(decoded_data)
 
     def move_mouse(self, data: bytes):
-        if len(data) != 4:
+        if len(data) != 5:
             return
 
         x = float(data[0])
         y = float(data[1])
         lmb = True if data[2] == "1" else False
         reset_position = True if data[3] == "1" else False
+        mouse_type = True if data[4] == "1" else False
+
+        mouse_scale_x = MOUSE_SCALE_X if mouse_type else TOUCHPAD_SCALE_X
+        mouse_scale_y = MOUSE_SCALE_Y if mouse_type else TOUCHPAD_SCALE_Y
+
+        print(f"Mouse type: {mouse_type}")
+        print(f"Mouse Scale X: {mouse_scale_x}")
 
         if reset_position:
             self.reset_mouse_position()

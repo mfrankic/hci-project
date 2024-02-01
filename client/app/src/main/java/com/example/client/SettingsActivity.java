@@ -2,6 +2,7 @@ package com.example.client;
 
 import android.content.Intent;
 import android.net.InetAddresses;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,13 +57,13 @@ public class SettingsActivity extends AppCompatActivity {
         String ipText = editTextAddress.getText().toString();
         String portText = editTextPort.getText().toString();
 
-        if (InetAddresses.isNumericAddress(ipText))
-        {
-            ipAddress = ipText;
-        }
-        else {
-            editTextAddress.setText(ipAddress);
-            Toast.makeText(this, "IP Address is invalid", Toast.LENGTH_LONG).show();
+        ipAddress = ipText;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (!InetAddresses.isNumericAddress(ipText)) {
+                editTextAddress.setText(ipAddress);
+                Toast.makeText(this, "IP Address is invalid", Toast.LENGTH_LONG).show();
+            }
         }
 
         try{

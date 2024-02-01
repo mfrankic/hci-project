@@ -23,7 +23,6 @@ public class ProcessData {
     private Vector2d distanceVelocity;
     private Trapezoid2d distanceDistanceTrapezoid;
     private float sensitivity;
-    // Gravity Rotation is disabled by default because it currently does not work as expected
     private boolean enableGravityRotation;
 
     public ProcessData(Parameters parameters) {
@@ -45,7 +44,6 @@ public class ProcessData {
     }
 
     public Vector2d next(float time, float delta, Vector3d acceleration, Vector3d angularVelocity) {
-        // Integrate rotation to distance, since that is used more often
         Vector3d rotationDelta = rotationDeltaTrapezoid.trapezoid(delta, angularVelocity);
         boolean active = active(acceleration, angularVelocity);
         Vector2d linearAcceleration = gravity(active, acceleration, rotationDelta);
@@ -56,66 +54,49 @@ public class ProcessData {
     }
 
     public boolean active(Vector3d acceleration, Vector3d angularVelocity) {
-
-        // Calculate the acceleration activation
         float acc = acceleration.xy().abs();
 
-        // Remove gravity or rather lower frequencies
         float gravity = activeGravityAverage.avg(acc);
         acc -= gravity;
         acc = Math.abs(acc);
 
-        // Remove noise
         acc = activeNoiseAverage.avg(acc);
 
-        // Calculate the rotation activation
         float rot = Math.abs(angularVelocity.z);
 
-        // Do the threshold
         return activeThreshold.active(acc, rot);
     }
 
     public Vector2d gravity(boolean active, Vector3d acceleration, Vector3d rotationDelta) {
 
-        // Differentiate between the user being active or not
         if (active) {
-
-            // Reset average for next phase
             if (!lastActive) {
                 gravityInactiveAverage.reset();
             }
 
-            // Rotate current gravity
             if (enableGravityRotation) gravityCurrent.rotate(rotationDelta.copy().negative());
 
         } else {
-            // Just calculate the average of the samples
             gravityCurrent = gravityInactiveAverage.avg(acceleration);
         }
 
-        // Subtract the gravity
         return acceleration.xy().subtract(gravityCurrent.xy());
     }
 
     public Vector2d distance(float delta, boolean active, Vector2d linearAcceleration, Vector3d rotationDelta) {
 
-        // Only calculate if it is active for optimization
         if (active){
 
-            // Counter-rotate the velocity
             distanceVelocity.rotate(-rotationDelta.z);
 
-            // Integrate to distance
             distanceVelocity.add(distanceVelocityTrapezoid.trapezoid(delta, linearAcceleration));
             return distanceDistanceTrapezoid.trapezoid(delta, distanceVelocity).multiply(sensitivity);
 
         } else {
 
-            // Reset stuff
             if (lastActive) {
                 distanceVelocity = new Vector2d();
 
-                // Clean the trapezoids because they contain a last value
                 distanceVelocityTrapezoid.reset();
                 distanceDistanceTrapezoid.reset();
             }

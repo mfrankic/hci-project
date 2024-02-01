@@ -10,44 +10,26 @@ public class Vector3d {
         this.z = z;
     }
 
-    /**
-     * Returns the x and y axes as a 2d vector
-     */
     public Vector2d xy() {
         return new Vector2d(x, y);
     }
 
-    /**
-     * Returns the y and z axes as a 2d vector
-     */
     public Vector2d yz() {
         return new Vector2d(y, z);
     }
 
-    /**
-     * Returns the x and z axes as a 2d vector
-     */
     public Vector2d xz() {
         return new Vector2d(x, z);
     }
 
-    /**
-     * Returns the absolute value or length of the vector
-     */
     public float abs() {
         return (float) Math.sqrt(x*x + y*y + z*z);
     }
 
-    /**
-     * Creates a copy of this vector
-     */
     public Vector3d copy() {
         return new Vector3d(x, y, z);
     }
 
-    /**
-     * Adds another vector to this one
-     */
     public Vector3d add(Vector3d other) {
         x += other.x;
         y += other.y;
@@ -56,9 +38,6 @@ public class Vector3d {
         return this;
     }
 
-    /**
-     * Adds another vector to this one
-     */
     public Vector3d subtract(Vector3d other) {
         x -= other.x;
         y -= other.y;
@@ -67,9 +46,6 @@ public class Vector3d {
         return this;
     }
 
-    /**
-     * Multiplies or scales this vector by an amount
-     */
     public Vector3d multiply(float factor) {
         x *= factor;
         y *= factor;
@@ -78,9 +54,6 @@ public class Vector3d {
         return this;
     }
 
-    /**
-     * Divides this vector by a given amount
-     */
     public Vector3d divide(float divisor) {
         x /= divisor;
         y /= divisor;
@@ -89,24 +62,14 @@ public class Vector3d {
         return this;
     }
 
-    /**
-     * Negates this vector
-     */
     public Vector3d negative() {
         return this.multiply(-1f);
     }
 
-    /**
-     * Calculates the average between this and a given other vector. Not affecting this instance.
-     */
     public Vector3d mean(Vector3d second) {
         return this.copy().add(second).divide(2);
     }
 
-    /**
-     * Rotates this vector by all three axis by using euler angles in a xyz fashion
-     * @param rotation vector containing the rotation for each axis as radians
-     */
     public Vector3d rotate(Vector3d rotation) {
 
         // Calculate sines and cosines that are used (for optimization)

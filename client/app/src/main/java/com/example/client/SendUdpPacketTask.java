@@ -26,7 +26,7 @@ public class SendUdpPacketTask extends AsyncTask<Void, Void, Void> {
 
     private byte[] getData(int x, int y, boolean clicked)
     {
-        String message = x + " " + y + " " + (clicked ? 1 : 0) + " " + "0";
+        String message = x + " " + y + " " + (clicked ? 1 : 0) + " " + "0" + " " + "0";
 
         return message.getBytes();
     }

@@ -135,7 +135,7 @@ public class MouseActivity extends AppCompatActivity implements View.OnClickList
                 movement.inputs.setResetButton(viewId == R.id.reset);
             } else {
                 movement.inputs.setLeftButton(viewId == R.id.lkm);
-            };
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

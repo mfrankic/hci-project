@@ -110,18 +110,19 @@ public class MovementHandler implements SensorEventListener {
                 message = distance.x + " "
                         + (-distance.y) + " "
                         + Boolean.compare(inputs.getLeftButton(), false) + " "
-                        + Boolean.compare(inputs.getResetButton(), false);
+                        + Boolean.compare(inputs.getResetButton(), false) + " "
+                        + "1";
 
                 lastTime = event.timestamp;
 
                 if (inputs.getLeftButton()) {
                     inputs.setLeftButton(false);
-                };
+                }
 
                 if (inputs.getResetButton()) {
                     this.unregister();
                     inputs.setResetButton(false);
-                };
+                }
             } else if (event.sensor.getType() == SENSOR_TYPE_GYROSCOPE) {
                 this.gyroSample = new Vector3d(event.values[0], event.values[1], event.values[2]);
             }
